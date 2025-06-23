@@ -1,0 +1,15 @@
+services:
+  - type: web          # Django backend service
+    name: thriftbyval-django
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python manage.py migrate
+    startCommand: gunicorn thriftbyval.wsgi
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: thriftbyval-db  # Links to the DB below
+          property: connectionString
+
+databases:
+  - name: thriftbyval-db  # PostgreSQL DB
+    plan: free            # Free tier
